@@ -4,7 +4,7 @@
 This is almond bot, a simple python bot that plays bombparty on [jklm.fun](https://jklm.fun). It is <b>NOT A CHEAT</b>, but opens another browser window and can play the game against you.
 
 ### Configuration
-You can configure the bot in [`settings.py`](/settings.py)
+You can configure the bot in [`settings.py`](/settings.py).
 
 ### How to use
 1. Install python 3.8 or higher.
@@ -19,7 +19,7 @@ You can configure the bot in [`settings.py`](/settings.py)
 This program is not affiliated with jklm.fun or its authors. It is a fan-made project, and not intended to be used in order to cause harm to anyone. Do only use this program in public lobbies if the owner consents. The author is not responsible for any damages caused by this program or the use of this program in any way. Use at your own risk.
 
 ### Credits
-This program was written by me, FabianButHere. Not written by me are the used libraries, which are all part of pip. The dictionary (`dictionary.txt`) is from [SCOWL (And Friends)](http://wordlist.aspell.net).
+This program was written by me, FabianButHere. Not written by me are the used libraries, which are all part of pip. The dictionary (`dictionary.txt`) is from [SCOWL (And Friends)](http://wordlist.aspell.net). The extended dictionary (`dictionary-ext.txt`) is from [Collins Official Scrabble Word List](https://drive.google.com/file/d/1oGDf1wjWp5RF_X9C7HoedhIWMh5uJs8s/view)
 
 ### License
 Almond Bot - A jklm.fun bombparty bot<br>
