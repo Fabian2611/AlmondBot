@@ -3,6 +3,9 @@
 
 This is almond bot, a simple python bot that plays bombparty on [jklm.fun](https://jklm.fun). It is <b>NOT A CHEAT</b>, but opens another browser window and can play the game against you.
 
+### Configuration
+You can configure the bot in [`settings.py`](/settings.py)
+
 ### How to use
 1. Install python 3.8 or higher.
 2. Install the requirements by running `pip install -r requirements.txt`
