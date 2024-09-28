@@ -1,5 +1,5 @@
 SETTINGS = {
-    "version": "1.0.0",
+    "version": "1.0.1",
     "lobby": None,
     "name" : "\U0001F330Almond Bot\U0001F330"
 }
