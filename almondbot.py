@@ -65,7 +65,7 @@ LETTER_DIST = {
 def get_dict(param: Callable = lambda x: True) -> list[str]:
     "Returns a list of all words where param(word) is True. If no param is defined, return list of all words."
     words = []
-    with open(r"C:\Users\Fabian\Desktop\Source\Data\dictionary.txt") as f:
+    with open(Path("dictionary-ext.txt").absolute()) as f:
         for line in f.readlines():
             l = line.strip().lower()
             if param(l):
