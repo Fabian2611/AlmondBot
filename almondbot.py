@@ -31,6 +31,7 @@ log = [f"Almond Bot v{SETTINGS["version"]}", "--------------------", f"LOG from 
 SETTINGS["lobby"] = answer if answer != "" else None
 
 # Represents the probability of a letter appearing in a given word
+# Double letters do not affect the probability
 # Analyzed out of dictionary.txt, can probably be improved
 LETTER_DIST = {
     'a': 0.5045704444591641,
