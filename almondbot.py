@@ -135,9 +135,9 @@ info("On site.")
 
 if SETTINGS.get("lobby", None) == None:
     name = driver.find_element(By.XPATH, "/html/body/div/div[6]/div[2]/div[1]/div/form/div[2]/input[1]")
+    WebDriverWait(driver, 5).until(EC.visibility_of_element_located(name))
     driver.execute_script(f"arguments[0].value = '{SETTINGS.get("name", "🌰Almond Bot🌰")}';", name)
-
-    driver.implicitly_wait(5)
+    WebDriverWait(driver, 5).until(EC.visibility_of_element_located(name))
     info("Name entered.")
 
     mode = driver.find_element(By.XPATH, "/html/body/div/div[6]/div[2]/div[1]/div/form/div[1]/div[2]/label/div[1]")
