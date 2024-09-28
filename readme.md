@@ -5,6 +5,7 @@ This is almond bot, a simple python bot that plays bombparty on [jklm.fun](https
 
 ### Configuration
 You can configure the bot in [`settings.py`](/settings.py).
+You can use a custom dictionary by changing `dictionary-ext.txt`. Please note that this will make the bot less optimized, since currently the letter distribution is hard coded. This will be changed in a later update.
 
 ### How to use
 1. Install python 3.8 or higher.
