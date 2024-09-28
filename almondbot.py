@@ -80,12 +80,12 @@ def get_unique_letter_count(word: str) -> int:
 def get_unused_letter_count(word: str) -> int:
     c = 0
     for ch in word:
-        if ch not in used_letters:
+        if ch not in used_letters and ch not in "xz":
             c += 1
     return c
 
 def get_unused_letter_rarity_sum_sq(word: str) -> float:
-    return sum([1 / (LETTER_DIST[ch.lower()] * LETTER_DIST[ch.lower()]) for ch in word if ch not in used_letters])
+    return sum([((1 / (LETTER_DIST[ch.lower()] * LETTER_DIST[ch.lower()])) if (ch not in used_letters and ch not in "xz") else 0) for ch in word])
 
 def word2score(word: str) -> int:
     # Unused Letters * 2 + Unique Letters * 2 + Length / 2 + Letter Rarity Sum
@@ -254,7 +254,7 @@ while True:
             info("Added word to used.")
             enter.send_keys(word)
             enter.send_keys(Keys.RETURN)
-            info(f"Wrote {word}.")
+            info(f"Wrote {word} with score {word2score(word)}.")
             for ch in word:
                 used_letters.append(ch)
             used_letters = list(set(used_letters))
@@ -267,7 +267,7 @@ while True:
             if len(used_letters) >= 24:
                 info("ALL LETTERS USED.")
                 used_letters = []
-            log.append(f"[{datetime.now().strftime('%H:%M:%S')}] Wrote '{word}'.\n")
+            log.append(f"[{datetime.now().strftime('%H:%M:%S')}] Wrote '{word}' with score {word2score(word)}.\n")
             retry_count += 1
             driver.implicitly_wait(0.2)
         else:
