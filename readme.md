@@ -1,11 +1,12 @@
-# Almond Bot v1.1.0
+# Almond Bot v1.2.0
 ## A bombparty bot made in python.
 
 This is almond bot, a simple python bot that plays bombparty on [jklm.fun](https://jklm.fun). It is <b>NOT A CHEAT</b>, but opens another browser window and can play the game against you.
 
 ### Configuration
 You can configure the bot in [`settings.py`](/settings.py).
-You can use a custom dictionary by changing `dictionary-ext.txt`. Please note that this will make the bot less optimized, since currently the letter distribution is hard coded. This will be changed in a later update.
+You can use a custom dictionary by adding a new dictionary file and putting its name as the `dictionary` value.
+There are two included dictionaries: [`dictionary.txt`](/dictionary.txt) and [`dictionary-ext.txt`](/dictionary-ext.txt).
 
 ### How to use
 1. Install python 3.8 or higher.

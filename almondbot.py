@@ -19,6 +19,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from termcolor import colored
 from colorama import init
 from settings import *
+from scrape import get_distribution
 from datetime import datetime
 import json
 
@@ -33,39 +34,40 @@ SETTINGS["lobby"] = answer if answer != "" else None
 # Represents the probability of a letter appearing in a given word
 # Double letters do not affect the probability
 # Analyzed out of dictionary.txt, can probably be improved
-LETTER_DIST = {
-    'a': 0.5045704444591641,
-    'b': 0.14237928065178512,
-    'c': 0.29490958468569917,
-    'd': 0.28911373120487516,
-    'e': 0.67816453600053,
-    'f': 0.10463999470093396,
-    'g': 0.23430151685765385,
-    'h': 0.17347817447174935,
-    'i': 0.547741273100616,
-    'j': 0.014588991190302708,
-    'k': 0.07412068622905213,
-    'l': 0.3634000132476651,
-    'm': 0.20027157713453003,
-    'n': 0.46640060939259453,
-    'o': 0.4081274425382526,
-    'p': 0.21621845399748293,
-    'q': 0.01579784063058886,
-    'r': 0.496340332516394,
-    's': 0.563373517917467,
-    't': 0.46002517056368813,
-    'u': 0.2527985692521693,
-    'v': 0.082367357753196,
-    'w': 0.07274624097502815,
-    'x': 0.023481486388024112,
-    'y': 0.12777372988010863,
-    'z': 0.030469629727760482
-}
+# LEGACY, not used anymore
+# LETTER_DIST = {
+#     'a': 0.5045704444591641,
+#     'b': 0.14237928065178512,
+#     'c': 0.29490958468569917,
+#     'd': 0.28911373120487516,
+#     'e': 0.67816453600053,
+#     'f': 0.10463999470093396,
+#     'g': 0.23430151685765385,
+#     'h': 0.17347817447174935,
+#     'i': 0.547741273100616,
+#     'j': 0.014588991190302708,
+#     'k': 0.07412068622905213,
+#     'l': 0.3634000132476651,
+#     'm': 0.20027157713453003,
+#     'n': 0.46640060939259453,
+#     'o': 0.4081274425382526,
+#     'p': 0.21621845399748293,
+#     'q': 0.01579784063058886,
+#     'r': 0.496340332516394,
+#     's': 0.563373517917467,
+#     't': 0.46002517056368813,
+#     'u': 0.2527985692521693,
+#     'v': 0.082367357753196,
+#     'w': 0.07274624097502815,
+#     'x': 0.023481486388024112,
+#     'y': 0.12777372988010863,
+#     'z': 0.030469629727760482
+# }
 
 def get_dict(param: Callable = lambda x: True) -> list[str]:
     "Returns a list of all words where param(word) is True. If no param is defined, return list of all words."
     words = []
-    with open(Path("dictionary-ext.txt").absolute()) as f:
+    with open(Path(SETTINGS["dictionary"]).absolute()) as f:
         for line in f.readlines():
             l = line.strip().lower()
             if param(l):
@@ -111,8 +113,7 @@ def get_best_word_with_part(part: str, key: Callable = word2score) -> str:
     return options[0]
 
 DICTIONARY = get_dict()
-# Shuffle for more human-like results
-random.shuffle(DICTIONARY)
+LETTER_DIST = get_distribution(DICTIONARY)
 
 used_words = []
 used_letters = []
