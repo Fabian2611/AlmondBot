@@ -84,9 +84,14 @@ def get_unused_letter_count(word: str) -> int:
             c += 1
     return c
 
+def get_unused_letter_rarity_sum_sq(word: str) -> float:
+    return sum([1 / (LETTER_DIST[ch.lower()] * LETTER_DIST[ch.lower()]) for ch in word if ch not in used_letters])
+
 def word2score(word: str) -> int:
     # Unused Letters * 2 + Unique Letters * 2 + Length / 2 + Letter Rarity Sum
-    return (get_unused_letter_count(word) * 2) + (get_unique_letter_count(word) * 2) + (len(word) / 2) + sum([1 / LETTER_DIST[ch.lower()] for ch in set(word)])
+    # return (get_unused_letter_count(word) * 2) + (get_unique_letter_count(word) * 2) + (len(word) / 2) + sum([1 / LETTER_DIST[ch.lower()] for ch in set(word)])
+    
+    return get_unused_letter_rarity_sum_sq(word) * 2 + get_unused_letter_count(word)
 
 def legit_word2score(word: str) -> int:
     return get_unique_letter_count(word) * 2 - len(word)
@@ -94,7 +99,7 @@ def legit_word2score(word: str) -> int:
 def clean_text(text: str) -> str:
     return text.lower().replace(" ", "")
 
-def get_best_word_with_part(part: str, key: Callable = word2score) -> str:
+def get_best_words_with_part(part: str, key: Callable = word2score) -> str:
     "Any key function must return the highest score for the best word"
     options = []
     _part: str = clean_text(part)
@@ -110,7 +115,12 @@ def get_best_word_with_part(part: str, key: Callable = word2score) -> str:
     if len(options) == 0:
         return None
     options.sort(key=key, reverse=True)
-    return options[0]
+    return options
+
+def send_message(message: str) -> None:
+    messagebox = driver.find_element(By.XPATH, "/html/body/div[2]/div[4]/div[2]/div[3]/div[2]/textarea")
+    messagebox.send_keys(message.replace("\n", Keys.ENTER))
+    messagebox.send_keys(Keys.ENTER)
 
 DICTIONARY = get_dict()
 LETTER_DIST = get_distribution(DICTIONARY)
@@ -179,7 +189,7 @@ try:
         EC.element_to_be_clickable((By.XPATH, "//button[@class='styled joinRound' and @data-text='joinGame']"))
     )
 except selenium.common.exceptions.TimeoutException:
-    error("Game could not start after 5 minutes.")
+    error("Pre-Round", "Game could not start after 5 minutes.")
     driver.quit()
     exit()
 
@@ -203,6 +213,12 @@ info("Round starting.")
 
 destroy = False
 
+latest_chat_message = ""
+
+retry_count = 0
+
+selection = []
+
 while True:
     info("New cycle")
     if keyboard.is_pressed("F7"):
@@ -218,6 +234,8 @@ while True:
         driver.quit()
         exit()
         break
+    if keyboard.is_pressed("F10"):
+        send_message("This is Almond Bot made by FabianButHere. It currently does *not* support commands.")
     sleep(0.01)
     try:
         enter = driver.find_element(By.XPATH, "/html/body/div[2]/div[3]/div[2]/div[2]/form/input")
@@ -225,7 +243,12 @@ while True:
             info("Found input field.")
             text = driver.find_element(By.XPATH, "/html/body/div[2]/div[2]/div[2]/div[2]/div").text
             info("Found syllable.")
-            word = get_best_word_with_part(text)
+            word = ""
+            if len(selection) > 0 and retry_count > 0:
+                word = selection[retry_count]
+            else:
+                selection = get_best_words_with_part(text)
+                word = selection[0]
             info("Found word.")
             used_words.append(word)
             info("Added word to used.")
@@ -245,17 +268,72 @@ while True:
                 info("ALL LETTERS USED.")
                 used_letters = []
             log.append(f"[{datetime.now().strftime('%H:%M:%S')}] Wrote '{word}'.\n")
+            retry_count += 1
             driver.implicitly_wait(0.2)
         else:
-            pass
+            retry_count = 0
+            selection = []
     except Exception as e:
         error("Main", str(type(e)) + ": " + str(e) + " in " + e.__traceback__.tb_frame.f_code.co_filename + ":" + str(e.__traceback__.tb_lineno))
+        retry_count = 0
+        selection = []
 
     try:
         join = driver.find_element(By.XPATH, "//button[@class='styled joinRound' and @data-text='joinGame' and text()='Join game']")
         join.click()
     except:
         info("No join button.")
+
+    # Read chat
+    # try:
+    #     info("Reading chat.")
+    #     chatbox = driver.find_element(By.XPATH, '//div[@class="log darkScrollbar"]')
+    #     info("Found chat.")
+    #     last_message = chatbox.find_element(By.XPATH, "./*[last()]")
+    #     info("Found last message.")
+    #     span = last_message.find_element(By.XPATH, ".//span[@class='text']")
+    #     info("Found span.")
+    #     if span.text  != latest_chat_message:
+    #         info(f"Executing command {span.text}")
+    #         latest_chat_message = span.text
+
+    #         # Execute command
+    #         if latest_chat_message.startswith("."):
+    #             if len(command) > 1:
+    #                 command = latest_chat_message[1:]
+    #             else:
+    #                 command = ""
+    #             if command.startswith == "c ":
+    #                 searchword = command[2:].strip().lower()
+
+    #                 result = ""
+    #                 c = 0
+    #                 for word in DICTIONARY:
+    #                     if searchword in word:
+    #                         if c == 20:
+    #                             c = 21
+    #                             break
+    #                         result += word + "\n"
+    #                         c += 1
+    #                 if result == "":
+    #                     result = "No words found."
+    #                 else:
+    #                     if c > 20:
+    #                         result = f"Found over 20 words. First 20 words are:\n{result}"
+    #                     else:
+    #                         result = f"Found {c} words:\n{result}"
+                    
+    #                 send_message(result)
+    #             elif command == "h" or command == "help" or command == "":
+    #                 help = "This is Almond Bot by FabianButHere. This is *not* an official bot.\nCommands:\n.h - Show this help message\n.c <word> - Search for words containing <word>"
+    #                 send_message(help)
+    #             else:
+    #                 send_message("Unknown command. Type .h for help.")
+
+                    
+
+    # except:
+    #     pass
 
     # Reset round
     try:
@@ -267,5 +345,3 @@ while True:
             info("Round over.")
     except:
         pass
-
-# TODO: Implement used letters and consider them in the score

@@ -1,4 +1,4 @@
-# Almond Bot v1.2.0
+# Almond Bot v1.2.1
 ## A bombparty bot made in python.
 
 This is almond bot, a simple python bot that plays bombparty on [jklm.fun](https://jklm.fun). It is <b>NOT A CHEAT</b>, but opens another browser window and can play the game against you.
